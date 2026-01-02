@@ -6,7 +6,7 @@ import Scanner from './components/Scanner';
 import Setup from './components/Setup';
 import Diary from './components/Diary';
 import Progress from './components/Progress';
-import More from './components/More';
+import Profile from './components/Profile';
 import FoodEntry from './components/FoodEntry';
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
       case 'progress':
         return <Progress data={data} onAddWeight={addWeight} />;
       case 'more':
-        return <More data={data} onEditProfile={() => setNeedsSetup(true)} />;
+        return <Profile data={data} onEditProfile={() => setNeedsSetup(true)} />;
       default:
         return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={handeAddFoodClick} />;
     }

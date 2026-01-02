@@ -2,7 +2,7 @@ import React from 'react';
 import { User, Settings, Info, LogOut, Moon, Sun, Monitor, ChevronRight } from 'lucide-react';
 import ThemeSwitcher from './ThemeSwitcher';
 
-const More = ({ data, onEditProfile }) => {
+const Profile = ({ data, onEditProfile }) => {
   const menuItems = [
     { id: 'profile', icon: User, label: 'Edit Profile', action: onEditProfile },
     { id: 'reminders', icon: Settings, label: 'Reminders', action: () => alert('Reminders coming soon!') },
@@ -13,7 +13,7 @@ const More = ({ data, onEditProfile }) => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 pb-24">
       <header className="bg-blue-600 dark:bg-blue-800 text-white p-4 pt-10 sticky top-0 z-10 shadow-md">
         <div className="max-w-lg mx-auto">
-          <h1 className="text-xl font-bold">More</h1>
+          <h1 className="text-xl font-bold">Profile</h1>
         </div>
       </header>
 
@@ -72,4 +72,4 @@ const More = ({ data, onEditProfile }) => {
   );
 };
 
-export default More;
+export default Profile;

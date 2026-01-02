@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, LayoutDashboard, Camera, LineChart, Plus } from 'lucide-react';
+import { Calendar, LayoutDashboard, Camera, LineChart, User } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -13,7 +13,7 @@ const BottomNav = ({ activeTab, onTabChange }) => {
     { id: 'diary', label: 'Diary', icon: Calendar },
     { id: 'scan', label: 'Scan', icon: Camera }, // Used for Scanner as requested
     { id: 'progress', label: 'Progress', icon: LineChart },
-    { id: 'more', label: 'More', icon: Plus },
+    { id: 'more', label: 'Profile', icon: User },
   ];
 
   return (
