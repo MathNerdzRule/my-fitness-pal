@@ -11,13 +11,17 @@ const defaultData = {
     activityLevel: 1.2, // Sedentary
     goal: 'maintain',
   },
-  logs: {}, 
+  logs: {}, // { '2023-10-27': { meals: [], exercise: 0 } }
+  weightHistory: [], // [{ date: '2023-10-27', weight: 150 }]
 };
 
 export const storage = {
   get: () => {
     const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : defaultData;
+    const parsed = data ? JSON.parse(data) : defaultData;
+    // Migration: ensure weightHistory exists
+    if (!parsed.weightHistory) parsed.weightHistory = [];
+    return parsed;
   },
   save: (data) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -34,16 +38,27 @@ export const storage = {
   updateUser: (user) => {
     const data = storage.get();
     data.user = { ...data.user, ...user };
+    
+    // Log weight change to history
+    const today = new Date().toISOString().split('T')[0];
+    const lastLog = data.weightHistory[data.weightHistory.length - 1];
+    if (!lastLog || lastLog.date !== today || lastLog.weight !== user.weight) {
+      data.weightHistory.push({ date: today, weight: user.weight });
+    }
+    
+    storage.save(data);
+  },
+  addWeightLog: (weight) => {
+    const data = storage.get();
+    const today = new Date().toISOString().split('T')[0];
+    data.weightHistory.push({ date: today, weight });
+    data.user.weight = weight;
     storage.save(data);
   }
 };
 
 export const calculateDailyGoal = (user) => {
-  // Mifflin-St Jeor Formula
-  // Weight in kg: lbs / 2.2
-  // Height in cm: ((feet * 12) + inches) * 2.54
-  
-  const weightKg = user.weight / 2.2;
+  const weightKg = user.weight / 2.22046; // More precise
   const heightCm = ((user.heightFeet * 12) + user.heightInches) * 2.54;
   
   const bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * user.age) + (user.gender === 'female' ? -161 : 5);

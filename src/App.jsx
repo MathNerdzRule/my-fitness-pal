@@ -4,14 +4,9 @@ import BottomNav from './components/BottomNav';
 import Today from './components/Today';
 import Scanner from './components/Scanner';
 import Setup from './components/Setup';
-
-// Simple placeholder for Diary and Progress
-const Placeholder = ({ title }) => (
-  <div className="p-6 flex flex-col items-center justify-center h-[80vh] text-gray-400 italic">
-    <h2 className="text-xl font-bold mb-2 text-gray-800 not-italic">{title}</h2>
-    Coming soon in the next update!
-  </div>
-);
+import Diary from './components/Diary';
+import Progress from './components/Progress';
+import More from './components/More';
 
 function App() {
   const [activeTab, setActiveTab] = useState('today');
@@ -23,7 +18,7 @@ function App() {
   const saveUser = (user) => {
     const updatedData = { ...data, user };
     setData(updatedData);
-    storage.save(updatedData);
+    storage.updateUser(user);
     localStorage.setItem('lochmara_setup_done', 'true');
     setNeedsSetup(false);
   };
@@ -40,6 +35,18 @@ function App() {
     setActiveTab('today');
   };
 
+  const updateLog = (dateStr, log) => {
+    const updatedData = { ...data };
+    updatedData.logs[dateStr] = log;
+    setData(updatedData);
+    storage.save(updatedData);
+  };
+
+  const addWeight = (weight) => {
+    storage.addWeightLog(weight);
+    setData(storage.get());
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'today':
@@ -47,9 +54,11 @@ function App() {
       case 'scan':
         return <Scanner onAddMeal={addMeal} />;
       case 'diary':
-        return <Placeholder title="Daily Diary" />;
+        return <Diary data={data} onUpdateLog={updateLog} />;
       case 'progress':
-        return <Placeholder title="Weight Progress" />;
+        return <Progress data={data} onAddWeight={addWeight} />;
+      case 'more':
+        return <More data={data} onEditProfile={() => setNeedsSetup(true)} />;
       default:
         return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} />;
     }
@@ -60,7 +69,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pb-20">
       <main className="max-w-lg mx-auto">
         {renderContent()}
       </main>
