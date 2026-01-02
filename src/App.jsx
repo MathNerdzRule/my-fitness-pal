@@ -61,7 +61,7 @@ function App() {
       case 'today':
         return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={handeAddFoodClick} onUpdateLog={updateLog} />;
       case 'scan':
-        return <Scanner onAddMeal={addMeal} />;
+        return <Scanner onAddMeal={addMeal} onManualEntry={() => setIsAddingFood(true)} />;
       case 'diary':
         return <Diary data={data} onUpdateLog={updateLog} onAddFoodClick={handeAddFoodClick} />;
       case 'progress':

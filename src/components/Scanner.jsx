@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Camera, Loader2, CheckCircle2, X } from 'lucide-react';
 import { analyzeLabel } from '../services/gemini';
 
-const Scanner = ({ onAddMeal }) => {
+const Scanner = ({ onAddMeal, onManualEntry }) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [selectedSection, setSelectedSection] = useState('breakfast');
@@ -71,9 +71,18 @@ const Scanner = ({ onAddMeal }) => {
         )}
 
         {loading && (
-          <div className="flex flex-col items-center space-y-4">
+          <div className="flex flex-col items-center space-y-6 w-full text-center">
             <Loader2 size={48} className="text-blue-600 dark:text-blue-400 animate-spin" />
-            <p className="font-medium text-gray-600 dark:text-gray-400">Analyzing Label...</p>
+            <div className="space-y-2">
+              <p className="font-bold text-gray-800 dark:text-gray-100">Analyzing Label...</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 max-w-[200px]">Please be patient while the AI extracts the data. This can take a few seconds.</p>
+            </div>
+            <button 
+              onClick={() => { setLoading(false); onManualEntry(); }}
+              className="mt-4 text-xs font-bold text-blue-500 uppercase tracking-widest hover:underline"
+            >
+              Cancel & Enter Manually
+            </button>
           </div>
         )}
 
@@ -81,9 +90,17 @@ const Scanner = ({ onAddMeal }) => {
           <div className="w-full space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">Analysis Result</h2>
-              <button onClick={() => setResult(null)} className="text-gray-400 dark:text-gray-500">
-                <X size={20} />
-              </button>
+              <div className="flex items-center space-x-4">
+                <button 
+                  onClick={() => fileInputRef.current?.click()} 
+                  className="text-xs font-bold text-blue-500 uppercase tracking-widest"
+                >
+                  Retake
+                </button>
+                <button onClick={() => setResult(null)} className="text-gray-400 dark:text-gray-500">
+                  <X size={20} />
+                </button>
+              </div>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
