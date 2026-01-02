@@ -5,6 +5,7 @@ import { analyzeLabel } from '../services/gemini';
 const Scanner = ({ onAddMeal }) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [selectedSection, setSelectedSection] = useState('breakfast');
   const fileInputRef = useRef(null);
 
   const handleCapture = async (e) => {
@@ -35,11 +36,19 @@ const Scanner = ({ onAddMeal }) => {
       onAddMeal({
         name: `Scanned Item (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
         ...result,
+        section: selectedSection,
         id: Date.now()
       });
       setResult(null);
     }
   };
+
+  const sections = [
+    { id: 'breakfast', label: 'Breakfast' },
+    { id: 'lunch', label: 'Lunch' },
+    { id: 'dinner', label: 'Dinner' },
+    { id: 'snacks', label: 'Snack' }
+  ];
 
   return (
     <div className="p-6 pb-24 space-y-6">
@@ -96,9 +105,28 @@ const Scanner = ({ onAddMeal }) => {
               </div>
             </div>
 
+            <div className="space-y-3">
+              <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase ml-1">Select Meal Section</p>
+              <div className="grid grid-cols-2 gap-2">
+                {sections.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => setSelectedSection(s.id)}
+                    className={`py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all border-2 ${
+                      selectedSection === s.id 
+                        ? "bg-blue-600 border-blue-600 text-white shadow-md shadow-blue-100 dark:shadow-none" 
+                        : "bg-gray-50 dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500"
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <button
               onClick={confirmMeal}
-              className="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center space-x-2 shadow-lg shadow-blue-200 dark:shadow-none active:scale-95 transition-transform"
+              className="w-full bg-blue-600 text-white font-bold py-5 rounded-2xl flex items-center justify-center space-x-2 shadow-xl shadow-blue-200 dark:shadow-none active:scale-95 transition-transform mt-4 text-lg"
             >
               <CheckCircle2 size={20} />
               <span>Log this Item</span>
