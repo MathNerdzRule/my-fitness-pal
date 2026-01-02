@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Utensils, Trash2 } from 'lucide-react';
 
-const Diary = ({ data, onUpdateLog }) => {
+const Diary = ({ data, onUpdateLog, onAddFoodClick }) => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
   const changeDate = (days) => {
@@ -76,7 +76,10 @@ const Diary = ({ data, onUpdateLog }) => {
                   </div>
                 ))}
                 
-                <button className="w-full text-left px-4 py-3 flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                <button 
+                  onClick={onAddFoodClick}
+                  className="w-full text-left px-4 py-3 flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors active:bg-gray-100"
+                >
                   <Plus size={16} />
                   <span>Add Food</span>
                 </button>

@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 
 const Setup = ({ user, onSave }) => {
-  const [formData, setFormData] = useState(user);
+  const [formData, setFormData] = useState({
+    ...user,
+    // Convert to strings for easier input handling
+    age: user.age.toString(),
+    weight: user.weight.toString(),
+    heightFeet: user.heightFeet.toString(),
+    heightInches: user.heightInches.toString(),
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    // Convert back to numbers on save
+    onSave({
+      ...formData,
+      age: Number(formData.age) || 0,
+      weight: Number(formData.weight) || 0,
+      heightFeet: Number(formData.heightFeet) || 0,
+      heightInches: Number(formData.heightInches) || 0,
+    });
+  };
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -27,22 +45,22 @@ const Setup = ({ user, onSave }) => {
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) => handleChange('name', e.target.value)}
               className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-3 outline-none transition-all shadow-sm text-gray-800 dark:text-gray-100"
               placeholder="Enter your name"
             />
           </div>
 
           <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 px-1 pt-2">Your Stats</h2>
-
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase ml-2">Age</label>
               <input
                 type="number"
+                inputMode="numeric"
                 value={formData.age}
-                onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
+                onChange={(e) => handleChange('age', e.target.value)}
                 className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-3 outline-none transition-all shadow-sm text-gray-800 dark:text-gray-100"
                 placeholder="Years"
               />
@@ -51,8 +69,8 @@ const Setup = ({ user, onSave }) => {
               <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase ml-2">Gender</label>
               <select
                 value={formData.gender}
-                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-2 outline-none transition-all shadow-sm appearance-none text-gray-800 dark:text-gray-100"
+                onChange={(e) => handleChange('gender', e.target.value)}
+                className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-[14px] outline-none transition-all shadow-sm appearance-none text-gray-800 dark:text-gray-100"
               >
                 <option value="female">Female</option>
                 <option value="male">Male</option>
@@ -64,8 +82,9 @@ const Setup = ({ user, onSave }) => {
             <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase ml-2">Weight (lbs)</label>
             <input
               type="number"
+              inputMode="decimal"
               value={formData.weight}
-              onChange={(e) => setFormData({ ...formData, weight: Number(e.target.value) })}
+              onChange={(e) => handleChange('weight', e.target.value)}
               className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-3 outline-none transition-all shadow-sm text-gray-800 dark:text-gray-100"
             />
           </div>
@@ -75,8 +94,9 @@ const Setup = ({ user, onSave }) => {
               <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase ml-2">Height (ft)</label>
               <input
                 type="number"
+                inputMode="numeric"
                 value={formData.heightFeet}
-                onChange={(e) => setFormData({ ...formData, heightFeet: Number(e.target.value) })}
+                onChange={(e) => handleChange('heightFeet', e.target.value)}
                 className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-3 outline-none transition-all shadow-sm text-gray-800 dark:text-gray-100"
               />
             </div>
@@ -84,8 +104,9 @@ const Setup = ({ user, onSave }) => {
               <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase ml-2">Height (in)</label>
               <input
                 type="number"
+                inputMode="numeric"
                 value={formData.heightInches}
-                onChange={(e) => setFormData({ ...formData, heightInches: Number(e.target.value) })}
+                onChange={(e) => handleChange('heightInches', e.target.value)}
                 className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-3 outline-none transition-all shadow-sm text-gray-800 dark:text-gray-100"
               />
             </div>
@@ -94,7 +115,7 @@ const Setup = ({ user, onSave }) => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-bold py-5 rounded-3xl shadow-xl shadow-blue-100 active:scale-[0.98] transition-all text-lg"
+          className="w-full bg-blue-600 text-white font-bold py-5 rounded-3xl shadow-xl shadow-blue-100 dark:shadow-none active:scale-[0.98] transition-all text-lg"
         >
           Save & Start Tracking
         </button>

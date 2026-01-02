@@ -50,11 +50,11 @@ function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'today':
-        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} />;
+        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={() => setActiveTab('scan')} />;
       case 'scan':
         return <Scanner onAddMeal={addMeal} />;
       case 'diary':
-        return <Diary data={data} onUpdateLog={updateLog} />;
+        return <Diary data={data} onUpdateLog={updateLog} onAddFoodClick={() => setActiveTab('scan')} />;
       case 'progress':
         return <Progress data={data} onAddWeight={addWeight} />;
       case 'more':

@@ -3,7 +3,7 @@ import CalorieRing from './CalorieRing';
 import ThemeSwitcher from './ThemeSwitcher';
 import { Plus, Flame, Utensils, ChevronRight, MoreHorizontal } from 'lucide-react';
 
-const Today = ({ data, dailyGoal, onAddMeal }) => {
+const Today = ({ data, dailyGoal, onAddMeal, onAddFoodClick }) => {
   const today = new Date().toISOString().split('T')[0];
   const log = data.logs[today] || { meals: [], exercise: 0 };
   
@@ -81,7 +81,10 @@ const Today = ({ data, dailyGoal, onAddMeal }) => {
             </div>
             
             <div className="p-4">
-               <button className="flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider">
+               <button 
+                onClick={onAddFoodClick}
+                className="flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider active:scale-95 transition-transform"
+               >
                   <Plus size={16} />
                   <span>Add Food</span>
                </button>
