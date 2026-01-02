@@ -12,9 +12,9 @@ const Setup = ({ user, onSave }) => {
     <div className="p-6 space-y-8 min-h-screen bg-white dark:bg-gray-950">
       <header className="text-center space-y-2">
         <div className="mx-auto w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
-           <span className="text-white text-3xl font-black italic">L</span>
+           <span className="text-white text-3xl font-black italic">M</span>
         </div>
-        <h1 className="text-3xl font-black text-blue-600 dark:text-blue-400 italic tracking-tighter uppercase">Lochmara</h1>
+        <h1 className="text-3xl font-black text-blue-600 dark:text-blue-400 italic tracking-tighter uppercase">MyFitnessPal</h1>
         <p className="text-gray-500 dark:text-gray-400 font-medium italic">Your personal calorie companion</p>
       </header>
 
