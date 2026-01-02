@@ -82,7 +82,7 @@ const Today = ({ data, dailyGoal, onAddMeal, onAddFoodClick }) => {
             
             <div className="p-4">
                <button 
-                onClick={onAddFoodClick}
+                onClick={() => onAddFoodClick(section.id)}
                 className="flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider active:scale-95 transition-transform"
                >
                   <Plus size={16} />

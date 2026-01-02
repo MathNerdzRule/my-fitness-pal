@@ -7,11 +7,14 @@ import Setup from './components/Setup';
 import Diary from './components/Diary';
 import Progress from './components/Progress';
 import More from './components/More';
+import FoodEntry from './components/FoodEntry';
 
 function App() {
   const [activeTab, setActiveTab] = useState('today');
   const [data, setData] = useState(storage.get());
   const [needsSetup, setNeedsSetup] = useState(!localStorage.getItem('lochmara_setup_done'));
+  const [isAddingFood, setIsAddingFood] = useState(false);
+  const [mealSection, setMealSection] = useState('breakfast');
   
   const dailyGoal = useMemo(() => calculateDailyGoal(data.user), [data.user]);
 
@@ -32,6 +35,7 @@ function App() {
     updatedData.logs[today].meals.push(meal);
     setData(updatedData);
     storage.save(updatedData);
+    setIsAddingFood(false);
     setActiveTab('today');
   };
 
@@ -47,20 +51,25 @@ function App() {
     setData(storage.get());
   };
 
+  const handeAddFoodClick = (section = 'breakfast') => {
+    setMealSection(section);
+    setIsAddingFood(true);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'today':
-        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={() => setActiveTab('scan')} />;
+        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={handeAddFoodClick} />;
       case 'scan':
         return <Scanner onAddMeal={addMeal} />;
       case 'diary':
-        return <Diary data={data} onUpdateLog={updateLog} onAddFoodClick={() => setActiveTab('scan')} />;
+        return <Diary data={data} onUpdateLog={updateLog} onAddFoodClick={handeAddFoodClick} />;
       case 'progress':
         return <Progress data={data} onAddWeight={addWeight} />;
       case 'more':
         return <More data={data} onEditProfile={() => setNeedsSetup(true)} />;
       default:
-        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} />;
+        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={handeAddFoodClick} />;
     }
   };
 
@@ -73,6 +82,15 @@ function App() {
       <main className="max-w-lg mx-auto">
         {renderContent()}
       </main>
+      
+      {isAddingFood && (
+        <FoodEntry 
+          initialSection={mealSection} 
+          onSave={addMeal} 
+          onCancel={() => setIsAddingFood(false)} 
+        />
+      )}
+
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );

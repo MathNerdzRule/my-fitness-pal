@@ -77,7 +77,7 @@ const Diary = ({ data, onUpdateLog, onAddFoodClick }) => {
                 ))}
                 
                 <button 
-                  onClick={onAddFoodClick}
+                  onClick={() => onAddFoodClick(section.id)}
                   className="w-full text-left px-4 py-3 flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors active:bg-gray-100"
                 >
                   <Plus size={16} />
