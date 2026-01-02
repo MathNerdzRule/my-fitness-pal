@@ -20,7 +20,21 @@ const Setup = ({ user, onSave }) => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4 bg-gray-50 dark:bg-gray-900 p-6 rounded-[2.5rem] border border-gray-100 dark:border-gray-800 shadow-sm">
-          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 px-1">Your Stats</h2>
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 px-1">Profile Info</h2>
+          
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase ml-2">Your Name</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 focus:border-blue-500 rounded-2xl px-4 py-3 outline-none transition-all shadow-sm text-gray-800 dark:text-gray-100"
+              placeholder="Enter your name"
+            />
+          </div>
+
+          <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100 px-1 pt-2">Your Stats</h2>
+
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">

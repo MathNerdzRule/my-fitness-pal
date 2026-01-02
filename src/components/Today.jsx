@@ -26,8 +26,8 @@ const Today = ({ data, dailyGoal, onAddMeal }) => {
           <h1 className="text-xl font-bold lowercase tracking-tight">myfitnesspal</h1>
           <div className="flex items-center space-x-3">
              <ThemeSwitcher />
-             <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center font-bold text-sm border border-blue-400">
-                {data.user.name[0]}
+             <div className="w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center font-black text-sm border-2 border-blue-400 shadow-inner">
+                {data.user.name ? data.user.name[0].toUpperCase() : 'U'}
              </div>
           </div>
         </div>
