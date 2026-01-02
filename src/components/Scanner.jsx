@@ -8,6 +8,42 @@ const Scanner = ({ onAddMeal, onManualEntry }) => {
   const [selectedSection, setSelectedSection] = useState('breakfast');
   const fileInputRef = useRef(null);
 
+  const resizeImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1024;
+          const MAX_HEIGHT = 1024;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.8).split(',')[1]);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleCapture = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -16,14 +52,10 @@ const Scanner = ({ onAddMeal, onManualEntry }) => {
     setResult(null);
 
     try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64Content = reader.result.split(',')[1];
-        const analysis = await analyzeLabel(base64Content);
-        setResult(analysis);
-        setLoading(false);
-      };
-      reader.readAsDataURL(file);
+      const compressedBase64 = await resizeImage(file);
+      const analysis = await analyzeLabel(compressedBase64);
+      setResult(analysis);
+      setLoading(false);
     } catch (error) {
       console.error("Scan failed", error);
       alert("Failed to analyze image. Please try again.");
