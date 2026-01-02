@@ -3,14 +3,15 @@ const STORAGE_KEY = 'lochmara_data';
 const defaultData = {
   user: {
     name: 'User',
-    age: 30,
-    weight: 70, // kg
-    height: 175, // cm
+    age: 18,
+    weight: 150, // lbs
+    heightFeet: 5,
+    heightInches: 7,
     gender: 'female',
     activityLevel: 1.2, // Sedentary
     goal: 'maintain',
   },
-  logs: {}, // { '2023-10-27': { meals: [], exercise: 0 } }
+  logs: {}, 
 };
 
 export const storage = {
@@ -39,9 +40,12 @@ export const storage = {
 
 export const calculateDailyGoal = (user) => {
   // Mifflin-St Jeor Formula
-  // Female: (10 * weight[kg]) + (6.25 * height[cm]) - (5 * age[y]) - 161
-  // Male: (10 * weight[kg]) + (6.25 * height[cm]) - (5 * age[y]) + 5
+  // Weight in kg: lbs / 2.2
+  // Height in cm: ((feet * 12) + inches) * 2.54
   
-  const bmr = (10 * user.weight) + (6.25 * user.height) - (5 * user.age) + (user.gender === 'female' ? -161 : 5);
+  const weightKg = user.weight / 2.2;
+  const heightCm = ((user.heightFeet * 12) + user.heightInches) * 2.54;
+  
+  const bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * user.age) + (user.gender === 'female' ? -161 : 5);
   return Math.round(bmr * user.activityLevel);
 };
