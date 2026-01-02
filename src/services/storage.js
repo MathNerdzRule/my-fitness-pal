@@ -11,7 +11,7 @@ const defaultData = {
     activityLevel: 1.2, // Sedentary
     goal: 'maintain',
   },
-  logs: {}, // { '2023-10-27': { meals: [], exercise: 0 } }
+  logs: {}, // { '2023-10-27': { meals: [], exercise: 0, notes: '' } }
   weightHistory: [], // [{ date: '2023-10-27', weight: 150 }]
 };
 
@@ -28,7 +28,7 @@ export const storage = {
   },
   getLogForDate: (dateStr) => {
     const data = storage.get();
-    return data.logs[dateStr] || { meals: [], exercise: 0 };
+    return data.logs[dateStr] || { meals: [], exercise: 0, notes: '' };
   },
   saveLogForDate: (dateStr, log) => {
     const data = storage.get();
@@ -58,7 +58,7 @@ export const storage = {
 };
 
 export const calculateDailyGoal = (user) => {
-  const weightKg = user.weight / 2.22046; // More precise
+  const weightKg = user.weight / 2.22046; 
   const heightCm = ((user.heightFeet * 12) + user.heightInches) * 2.54;
   
   const bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * user.age) + (user.gender === 'female' ? -161 : 5);

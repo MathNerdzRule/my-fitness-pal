@@ -59,7 +59,7 @@ function App() {
   const renderContent = () => {
     switch (activeTab) {
       case 'today':
-        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={handeAddFoodClick} />;
+        return <Today data={data} dailyGoal={dailyGoal} onAddMeal={addMeal} onAddFoodClick={handeAddFoodClick} onUpdateLog={updateLog} />;
       case 'scan':
         return <Scanner onAddMeal={addMeal} />;
       case 'diary':

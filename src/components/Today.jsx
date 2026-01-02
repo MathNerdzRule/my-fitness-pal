@@ -1,9 +1,8 @@
 import React from 'react';
-import CalorieRing from './CalorieRing';
 import ThemeSwitcher from './ThemeSwitcher';
-import { Plus, Flame, Utensils, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { Plus, Utensils, Trash2 } from 'lucide-react';
 
-const Today = ({ data, dailyGoal, onAddMeal, onAddFoodClick }) => {
+const Today = ({ data, dailyGoal, onAddFoodClick, onUpdateLog }) => {
   const today = new Date().toISOString().split('T')[0];
   const log = data.logs[today] || { meals: [], exercise: 0 };
   
@@ -17,6 +16,11 @@ const Today = ({ data, dailyGoal, onAddMeal, onAddFoodClick }) => {
     { id: 'dinner', title: 'Dinner' },
     { id: 'snacks', title: 'Snacks' },
   ];
+
+  const deleteMeal = (id) => {
+    const updatedMeals = log.meals.filter(m => m.id !== id);
+    onUpdateLog(today, { ...log, meals: updatedMeals });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-950 pb-24">
@@ -41,23 +45,17 @@ const Today = ({ data, dailyGoal, onAddMeal, onAddFoodClick }) => {
                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{dailyGoal}</p>
                  <p className="text-[10px] text-gray-400 uppercase font-bold">Goal</p>
               </div>
-              <div className="text-center px-4">
-                 <p className="text-sm font-bold text-gray-400 dark:text-gray-500">-</p>
-              </div>
+              <div className="text-center px-4 font-bold text-gray-300">-</div>
               <div className="text-center flex-1 border-r border-gray-100 dark:border-gray-800">
                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">{totalConsumed}</p>
                  <p className="text-[10px] text-gray-400 uppercase font-bold">Food</p>
               </div>
-              <div className="text-center px-4">
-                 <p className="text-sm font-bold text-gray-400 dark:text-gray-500">+</p>
-              </div>
+              <div className="text-center px-4 font-bold text-gray-300">+</div>
               <div className="text-center flex-1 border-r border-gray-100 dark:border-gray-800">
                  <p className="text-2xl font-bold text-green-500">{totalExercise}</p>
                  <p className="text-[10px] text-gray-400 uppercase font-bold">Exercise</p>
               </div>
-              <div className="text-center px-4">
-                 <p className="text-sm font-bold text-gray-400 dark:text-gray-500">=</p>
-              </div>
+              <div className="text-center px-4 font-bold text-gray-300">=</div>
               <div className="text-center flex-1">
                  <p className={`text-2xl font-bold ${remaining >= 0 ? 'text-green-500' : 'text-red-500'}`}>{remaining}</p>
                  <p className="text-[10px] text-gray-400 uppercase font-bold">Remaining</p>
@@ -73,55 +71,52 @@ const Today = ({ data, dailyGoal, onAddMeal, onAddFoodClick }) => {
         </div>
 
         {/* Meal Sections */}
-        {mealSections.map((section) => (
-          <div key={section.id} className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
-            <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
-              <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">{section.title}</h3>
-              <span className="text-xs font-bold text-gray-400">0 cal</span>
-            </div>
-            
-            <div className="p-4">
-               <button 
-                onClick={() => onAddFoodClick(section.id)}
-                className="flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider active:scale-95 transition-transform"
-               >
+        {mealSections.map((section) => {
+          const sectionMeals = log.meals.filter(m => m.section === section.id);
+          const sectionCals = sectionMeals.reduce((sum, m) => sum + m.calories, 0);
+          
+          return (
+            <div key={section.id} className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+              <div className="bg-blue-50 dark:bg-blue-900/20 px-4 py-2 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
+                <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">{section.title}</h3>
+                <span className="text-xs font-bold text-gray-400">{sectionCals} cal</span>
+              </div>
+              
+              <div className="divide-y divide-gray-50 dark:divide-gray-800">
+                {sectionMeals.map((meal) => (
+                  <div key={meal.id} className="p-4 flex justify-between items-center group">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <Utensils size={16} className="text-gray-400" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-gray-800 dark:text-gray-100">{meal.name}</p>
+                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-tight">
+                          {meal.calories} cal • {meal.protein}g P • {meal.carbs}g C • {meal.fat}g F
+                        </p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => deleteMeal(meal.id)}
+                      className="text-gray-300 hover:text-red-500 transition-colors p-2"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                ))}
+                
+                <button 
+                  onClick={() => onAddFoodClick(section.id)}
+                  className="w-full text-left px-4 py-3 flex items-center space-x-2 text-blue-500 font-bold text-xs uppercase tracking-wider active:bg-gray-50 transition-colors"
+                >
                   <Plus size={16} />
                   <span>Add Food</span>
-               </button>
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-        
-        {/* Recent Activity (Legacy) */}
-        {log.meals.length > 0 && (
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 space-y-3">
-             <h3 className="text-xs font-bold text-gray-400 uppercase">Recently Logged</h3>
-             {log.meals.slice(-3).reverse().map((meal) => (
-               <div key={meal.id} className="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-800 last:border-0">
-                  <div className="flex items-center space-x-3">
-                    <Utensils size={16} className="text-gray-400" />
-                    <div>
-                      <p className="font-bold text-sm text-gray-800 dark:text-gray-100">{meal.name}</p>
-                      <p className="text-[10px] text-gray-400 uppercase font-bold">{meal.calories} kcal • {meal.protein}g P</p>
-                    </div>
-                  </div>
-                  <ChevronRight size={16} className="text-gray-300" />
-               </div>
-             ))}
-          </div>
-        )}
-
+          );
+        })}
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.4s ease-out;
-        }
-      `}</style>
     </div>
   );
 };
