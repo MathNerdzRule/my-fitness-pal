@@ -188,7 +188,10 @@ const Scanner = ({ onAddMeal, onManualEntry }) => {
                <div>
                   <h3 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-1">Found it!</h3>
                   <p className="text-xl font-black text-gray-800 dark:text-gray-100 leading-tight">{result.name}</p>
-                  {result.brand && <p className="text-xs text-gray-400 font-bold uppercase">{result.brand}</p>}
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
+                    {result.brand && <p className="text-[10px] text-gray-400 font-bold uppercase">{result.brand}</p>}
+                    {result.serving_size && <p className="text-[10px] text-blue-500 font-bold uppercase italic">Serving: {result.serving_size}</p>}
+                  </div>
                </div>
                <button onClick={() => setResult(null)} className="p-2 text-gray-300 hover:text-red-500 transition-colors">
                   <X size={24} />
