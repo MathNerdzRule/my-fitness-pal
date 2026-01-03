@@ -6,7 +6,7 @@ const Profile = ({ data, onEditProfile }) => {
   const menuItems = [
     { id: 'profile', icon: User, label: 'Edit Profile', action: onEditProfile },
     { id: 'reminders', icon: Settings, label: 'Reminders', action: () => alert('Reminders coming soon!') },
-    { id: 'help', icon: Info, label: 'Help & Feedback', action: () => window.open('https://help.myfitnesspal.com', '_blank') },
+    { id: 'help', icon: Info, label: 'Help & Feedback', action: () => alert('Go ask your dad for help') },
   ];
 
   return (
