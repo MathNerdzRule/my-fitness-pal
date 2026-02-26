@@ -1,5 +1,5 @@
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-3-flash-latest:generateContent?key=${API_KEY}`;
 
 export const analyzeLabel = async (base64Image) => {
   const prompt = `You are a health assistant. Analyze the nutrition label in this image. Extract: Calories (number), Protein (g), Carbs (g), and Fat (g). Format the output as a clean JSON object. If a label is unreadable, provide your best estimate based on the product type. 
